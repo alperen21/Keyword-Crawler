@@ -1,0 +1,10 @@
+{
+    "instagram":{
+        "username":"name of the environment variable that contains the username",
+        "password":"name of the environment variable that contains the password"
+    },
+    "twitter":{
+        "username":"name of the environment variable that contains the username",
+        "password":"name of the environment variable that contains the password"
+    }
+}

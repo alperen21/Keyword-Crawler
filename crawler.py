@@ -3,6 +3,8 @@ import requests
 from selenium import webdriver
 import time
 from selenium.webdriver.firefox.options import Options
+
+
 options = Options()
 options.add_argument('-headless')
 

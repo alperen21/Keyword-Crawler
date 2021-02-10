@@ -29,3 +29,24 @@ console.warn: SearchSettings: "get: No settings file exists, new profile?" (new 
 1612951575383	Marionette	INFO	Listening on port 57036
 1612951575537	Marionette	WARN	TLS certificate errors will be ignored for this session
 1612951580645	Marionette	INFO	Stopped listening on port 57036
+1612952589423	geckodriver	INFO	Listening on 127.0.0.1:57248
+1612952590373	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/var/folders/g4/vf0pxb8113xb4932pzkvqpf80000gn/T/rust_mozprofileE3DkOQ"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1612952594371	Marionette	INFO	Listening on port 57255
+1612952594507	Marionette	WARN	TLS certificate errors will be ignored for this session
+1612952600176	Marionette	INFO	Stopped listening on port 57255
+1612952667467	geckodriver	INFO	Listening on 127.0.0.1:57334
+1612952668414	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/var/folders/g4/vf0pxb8113xb4932pzkvqpf80000gn/T/rust_mozprofilekeVzuX"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1612952672872	Marionette	INFO	Listening on port 57341
+1612952672950	Marionette	WARN	TLS certificate errors will be ignored for this session
+1612952678070	Marionette	INFO	Stopped listening on port 57341
+1612952730402	geckodriver	INFO	Listening on 127.0.0.1:57434
+1612952731148	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/var/folders/g4/vf0pxb8113xb4932pzkvqpf80000gn/T/rust_mozprofile2ktwwF"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1612952739338	Marionette	INFO	Listening on port 57442
+1612952739438	Marionette	WARN	TLS certificate errors will be ignored for this session
+1612952744808	Marionette	INFO	Stopped listening on port 57442
