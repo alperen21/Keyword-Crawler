@@ -2,13 +2,12 @@ from bs4 import BeautifulSoup
 import requests
 from selenium import webdriver
 import time
+from selenium.webdriver.firefox.options import Options
+options = Options()
+options.add_argument('-headless')
 
-options = webdriver.ChromeOptions()
-options.binary_location = '/Applications/Chrome.app/Contents/MacOS/Google Chrome'
-# options.add_argument('headless')
-options.add_argument('window-size=1200x600')
-
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Firefox(
+    executable_path=r'/Users/alperen/Desktop/geckodriver', options=options)
 driver.get('https://www.instagram.com')
 
 time.sleep(3)

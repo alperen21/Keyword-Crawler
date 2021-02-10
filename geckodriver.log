@@ -10,3 +10,22 @@ console.warn: SearchSettings: "get: No settings file exists, new profile?" (new 
 1612948699344	Marionette	INFO	Listening on port 55966
 1612948699450	Marionette	WARN	TLS certificate errors will be ignored for this session
 1612948701552	Marionette	INFO	Stopped listening on port 55966
+1612951451922	geckodriver	INFO	Listening on 127.0.0.1:56840
+1612951452877	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "--marionette" "-foreground" "-no-remote" "-profile" "/var/folders/g4/vf0pxb8113xb4932pzkvqpf80000gn/T/rust_mozprofilepkikoV"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1612951459034	Marionette	INFO	Listening on port 56848
+1612951459179	Marionette	WARN	TLS certificate errors will be ignored for this session
+1612951464722	Marionette	INFO	Stopped listening on port 56848
+1612951534664	geckodriver	INFO	Listening on 127.0.0.1:56950
+1612951535618	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "--marionette" "-foreground" "-no-remote" "-profile" "/var/folders/g4/vf0pxb8113xb4932pzkvqpf80000gn/T/rust_mozprofilepPIlSr"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1612951539870	Marionette	INFO	Listening on port 56957
+1612951540002	Marionette	WARN	TLS certificate errors will be ignored for this session
+1612951553125	Marionette	INFO	Stopped listening on port 56957
+1612951571171	geckodriver	INFO	Listening on 127.0.0.1:57029
+1612951572089	mozrunner::runner	INFO	Running command: "/Applications/Firefox.app/Contents/MacOS/firefox-bin" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "/var/folders/g4/vf0pxb8113xb4932pzkvqpf80000gn/T/rust_mozprofileZn7e5x"
+*** You are running in headless mode.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1612951575383	Marionette	INFO	Listening on port 57036
+1612951575537	Marionette	WARN	TLS certificate errors will be ignored for this session
+1612951580645	Marionette	INFO	Stopped listening on port 57036
