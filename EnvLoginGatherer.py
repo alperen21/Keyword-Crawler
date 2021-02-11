@@ -5,6 +5,7 @@ import os
 class EnvLoginGatherer:
     # this class is created to simplify gathering information regarding password / username from environment variables
     # EnvLoginGatherer class will probably be the parent class of the class that will encapsulate the crawler.
+    # for creating an environment variable on Mac/Linux: nano .bash_profile and then restart the IDE
 
     def __init__(self, directory="login.json"):
         # Pass reads the json file as it is being initialized.
