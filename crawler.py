@@ -1,11 +1,10 @@
-from bs4 import BeautifulSoup
-import requests
 from selenium import webdriver
 import time
 import json
 from selenium.webdriver.firefox.options import Options
 from EnvLoginGatherer import EnvLoginGatherer
 import sys
+import re
 
 
 class SponsorshipCrawler(EnvLoginGatherer):
@@ -126,6 +125,14 @@ class SponsorshipCrawler(EnvLoginGatherer):
             '//*[@id="react-root"]/section/main/div/div[1]/article/div[3]/div[1]/ul/div/li/div/div/div[2]/span').text
 
         return text.lower()
+
+    def search_instagram(self, url):
+        text = self.get_instagram_text(url)
+        with open("output.txt", "a") as f:
+            for word in self.keywords:
+                if re.search("(?<![\w\d])"+word+"(?![\w\d])", text):
+                    f.write(text + "\n" + "source: " + url + "\n")
+                    return
 
     def crawl(self):
         try:
