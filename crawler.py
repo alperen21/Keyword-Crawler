@@ -5,11 +5,12 @@ import time
 import json
 from selenium.webdriver.firefox.options import Options
 from EnvLoginGatherer import EnvLoginGatherer
+import sys
 
 
 class SponsorshipCrawler(EnvLoginGatherer):
 
-    def __init__(self, json_directory="login.json", gecko_directory=r'/Users/alperen/Desktop/geckodriver', urls_directory="urls.json", sleep_for=3):
+    def __init__(self, json_directory="login.json", gecko_directory=r'/Users/alperen/Desktop/geckodriver', search_directory="search.json", sleep_for=3, depth=2):
         # json_directory is the directory of the json file that contains the name of environment variables (see comments on EnvLoginGatherer.py )
 
         # gecko_directory is the directory that contains gecko driver
@@ -18,17 +19,37 @@ class SponsorshipCrawler(EnvLoginGatherer):
         # if its too long the execution will take a long time
         # if its too short selenium might try to grab an element before the page loads and then crash
 
-        # urls directory is the directory which contains urls to visit for each social media website
+        # search directory is the directory which contains urls to visit for each social media website and the keywords
 
+        # depth levels are how deep down the posts will the crawler go
         options = Options()
         options.add_argument('-headless')  # to toggle on headless option
 
         self.driver = webdriver.Firefox(
             executable_path=gecko_directory, options=options)  # this is the driver we will use throught the instance of the class
         self.sleep_for = sleep_for
+        self.depth = depth
 
-        with open(urls_directory, "r") as f:  # loading urls to visit
-            self.urls = json.load(f)
+        try:  # try except blocks are there for more meaningful errors rather than generic errors
+            with open(search_directory, "r") as f:  # loading urls to visit
+                json_data = json.load(f)
+        except:
+            print("can't find search.json")
+            sys.exit()
+
+        try:
+            self.urls = json_data['urls']
+        except:
+            print("cannot find urls in search.json")
+            sys.exit()
+
+        try:
+            self.keywords = json_data['keywords']
+        except:
+            print("cannot find keywords in search.json")
+            sys.exit()
+
+        print("search.json has been parsed successfully")
 
         super().__init__(json_directory)  # initialization for the parent class
 
@@ -36,9 +57,8 @@ class SponsorshipCrawler(EnvLoginGatherer):
         scrolldown_script = "window.scrollTo(0, document.body.scrollHeight);"
         self.driver.execute_script(scrolldown_script)
 
-    def instagram(self):
+    def instagram_login(self):
         # gathers information from instagram
-        print("starting gathering information from instagram")
         self.driver.get('https://www.instagram.com')
         time.sleep(self.sleep_for)
 
@@ -61,9 +81,13 @@ class SponsorshipCrawler(EnvLoginGatherer):
 
         time.sleep(self.sleep_for)
 
-        print("login successful")
-        # visiting urls
+        print("logged in as:", email)
 
+    def instagram(self):
+        # logging in
+        self.instagram_login()
+
+        # visiting urls
         post = 'https://www.instagram.com/p/'
         with open("output.txt", "a") as f:
 
@@ -75,33 +99,41 @@ class SponsorshipCrawler(EnvLoginGatherer):
                 posts = []  # reset posts list
                 self.driver.get(url)  # go to url page of the account
                 time.sleep(self.sleep_for)
-                count_outer = 0
-                count_inner = 0
-                iteration_number = 2  # How many times will the while loop iterate
-                print("will find", iteration_number*2, "posts")
+                print("will find approx.", self.depth*30, "posts")
 
-                while (len(posts) <= iteration_number*25):
-                    count_outer += 1
+                while (len(posts) <= self.depth*25):
                     links = [a.get_attribute(
                         'href') for a in self.driver.find_elements_by_tag_name('a')]
 
                     for link in links:
-                        count_inner += 1
-                        print("iteration", count_outer, ":", count_inner)
                         if post in link and link not in posts:
                             posts.append(link)
                     self.execute_scroll_script()
                     time.sleep(self.sleep_for)
 
-                print("writing info on the txt file")
+                print("found posts")
                 for post_link in posts:
                     print("writing: ", post_link)
                     f.write(post_link + "\n")
 
+    def get_instagram_text(self, url):
+        # in: instagram post url
+        # out: text of the instagram post
+
+        self.driver.get(url)
+        time.sleep(self.sleep_for)
+        text = self.driver.find_element_by_xpath(
+            '//*[@id="react-root"]/section/main/div/div[1]/article/div[3]/div[1]/ul/div/li/div/div/div[2]/span').text
+
+        return text.lower()
+
+    def crawl(self):
+        try:
+            self.instagram()
+            print("instagram scraping is complete")
+        except:
+            print("not scraping instagram")
+        self.close()
+
     def close(self):
         self.driver.close()
-
-
-crawler = SponsorshipCrawler()
-crawler.instagram()
-crawler.close()
