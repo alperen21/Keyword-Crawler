@@ -2,3 +2,6 @@ login.json
 test.py
 output.txt
 geckodriver.log
+deepsearch.json
+deepsearchCompany.json
+__pycache__/*

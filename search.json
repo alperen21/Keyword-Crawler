@@ -1,12 +1,12 @@
 {
     "urls": {
         "instagram":  [
-            "https://www.instagram.com/iessabanci/?hl=en"
         ],
-        "twitter": []
+        "twitter": [
+            "https://twitter.com/eik_sabanci"
+        ]
     },
     "keywords": [
-        "yapı",
-        "kredi"
+        "kariyer"
     ]
 }

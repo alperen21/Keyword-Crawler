@@ -80,7 +80,7 @@ class SponsorshipCrawler(EnvLoginGatherer):
 
         time.sleep(self.sleep_for)
 
-        print("logged in as:", email)
+        print("logged in to instagram as:", email)
 
     def instagram(self):
         # logging in
@@ -110,7 +110,6 @@ class SponsorshipCrawler(EnvLoginGatherer):
                     self.execute_scroll_script()
                     time.sleep(self.sleep_for)
 
-                print("found posts")
                 for post_link in posts:
                     self.search_instagram(f, post_link)
 
@@ -130,14 +129,101 @@ class SponsorshipCrawler(EnvLoginGatherer):
         for word in self.keywords:
             if re.search("(?<![\w\d])"+word+"(?![\w\d])", text):
                 f.write(text + "\n" + "source: " + url + "\n")
+                print("a post containing the key word found")
                 return
 
+    def twitter_login(self):
+
+        # sending request
+        self.driver.get('https://twitter.com/login')
+        time.sleep(self.sleep_for)
+
+        # locating relevant elements
+        username_input = self.driver.find_element_by_xpath(
+            '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[1]/label/div/div[2]/div/input')
+        password_input = self.driver.find_element_by_xpath(
+            '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[2]/label/div/div[2]/div/input')
+        button = self.driver.find_element_by_xpath(
+            '//*[@id="react-root"]/div/div/div[2]/main/div/div/div[2]/form/div/div[3]/div/div')
+
+        # gathering username and password information
+        email = self.username("twitter")
+        password = self.password("twitter")
+
+        # logging in
+        username_input.send_keys(email)
+        password_input.send_keys(password)
+        button.click()
+
+        time.sleep(self.sleep_for)
+        print("logged in to twitter as:", email)
+
+    def twitter(self):
+        self.twitter_login()
+        with open("output.txt", "a") as f:
+
+            for url in self.urls["twitter"]:  # for each account
+                post = url + "/status/"
+                f.write("#information found for: " + url + "\n\n")
+
+                print("scraping: ", url)
+                posts = []  # reset posts list
+                self.driver.get(url)  # go to url page of the account
+                time.sleep(self.sleep_for)
+                print("will find approx.", self.depth*25, "posts")
+
+                while (len(posts) <= self.depth*25):
+                    links = [a.get_attribute(
+                        'href') for a in self.driver.find_elements_by_tag_name('a')]
+                    for link in links:
+                        if post in link and link not in posts:
+
+                            posts.append(link)
+                    self.execute_scroll_script()
+                    time.sleep(self.sleep_for)
+
+                for post_link in posts:
+                    if "/photo" not in post_link and "/media_tags" not in post_link:
+                        self.search_twitter(f, post_link)
+
+    def search_twitter(self, f, url):
+        text = self.get_twitter_text(url)
+        for word in self.keywords:
+            if re.search("(?<![\w\d])"+word+"(?![\w\d])", text):
+                f.write(text + "\n" + "source: " + url + "\n")
+                print("a post containing the key word found")
+                return
+
+    def get_twitter_text(self, url):
+        self.driver.get(url)
+        time.sleep(self.sleep_for)
+        text = ""
+        elements = self.driver.find_elements_by_tag_name("span")
+        count = 0
+        for element in elements:
+            text += element.text
+        return text
+
     def crawl(self):
+
+        with open("output.txt", "a") as f:
+            f.write("*****INSTAGRAM*****\n\n")
+
         try:
+            print("starting scraping instagram")
             self.instagram()
             print("instagram scraping is complete")
         except:
-            print("not scraping instagram")
+            print("instagram scraping is incomplete")
+
+        with open("output.txt", "a") as f:
+            f.write("*****TWITTER*****\n\n")
+        try:
+            print("starting scraping twitter")
+            self.twitter()
+            print("twitter scraping is complete")
+        except:
+            print("twitter scraping is incomplete")
         self.close()
 
     def close(self):
