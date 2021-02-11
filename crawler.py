@@ -92,7 +92,7 @@ class SponsorshipCrawler(EnvLoginGatherer):
 
             for url in self.urls["instagram"]:  # for each account
 
-                f.write(url + "\n\n")
+                f.write("#information found for: " + url + "\n\n")
 
                 print("scraping: ", url)
                 posts = []  # reset posts list
@@ -112,8 +112,7 @@ class SponsorshipCrawler(EnvLoginGatherer):
 
                 print("found posts")
                 for post_link in posts:
-                    print("writing: ", post_link)
-                    f.write(post_link + "\n")
+                    self.search_instagram(f, post_link)
 
     def get_instagram_text(self, url):
         # in: instagram post url
@@ -126,13 +125,12 @@ class SponsorshipCrawler(EnvLoginGatherer):
 
         return text.lower()
 
-    def search_instagram(self, url):
+    def search_instagram(self, f, url):
         text = self.get_instagram_text(url)
-        with open("output.txt", "a") as f:
-            for word in self.keywords:
-                if re.search("(?<![\w\d])"+word+"(?![\w\d])", text):
-                    f.write(text + "\n" + "source: " + url + "\n")
-                    return
+        for word in self.keywords:
+            if re.search("(?<![\w\d])"+word+"(?![\w\d])", text):
+                f.write(text + "\n" + "source: " + url + "\n")
+                return
 
     def crawl(self):
         try:
@@ -144,3 +142,4 @@ class SponsorshipCrawler(EnvLoginGatherer):
 
     def close(self):
         self.driver.close()
+        self.driver.quit()
