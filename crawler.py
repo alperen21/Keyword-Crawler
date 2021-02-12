@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from selenium import webdriver
 import time
 import json
@@ -7,10 +8,10 @@ import sys
 import re
 
 
-class SponsorshipCrawler(EnvLoginGatherer):
+class KeywordCrawler(EnvLoginGatherer):
 
-    def __init__(self, json_directory="login.json", gecko_directory=r'/Users/alperen/Desktop/geckodriver', search_directory="search.json", sleep_for=3, depth=2):
-        # json_directory is the directory of the json file that contains the name of environment variables (see comments on EnvLoginGatherer.py )
+    def __init__(self, gecko_directory, login_directory="login.json", search_directory="search.json", sleep_for=3, depth=2, url_only=True):
+        # login_directory is the directory of the json file that contains the name of environment variables (see comments on EnvLoginGatherer.py )
 
         # gecko_directory is the directory that contains gecko driver
 
@@ -21,6 +22,9 @@ class SponsorshipCrawler(EnvLoginGatherer):
         # search directory is the directory which contains urls to visit for each social media website and the keywords
 
         # depth levels are how deep down the posts will the crawler go
+
+        # if url only is set to true, the script will not write down the contents of the findings, just urls
+
         options = Options()
         options.add_argument('-headless')  # to toggle on headless option
 
@@ -49,8 +53,8 @@ class SponsorshipCrawler(EnvLoginGatherer):
             sys.exit()
 
         print("search.json has been parsed successfully")
-
-        super().__init__(json_directory)  # initialization for the parent class
+        self.url_only = url_only
+        super().__init__(login_directory)  # initialization for the parent class
 
     def execute_scroll_script(self):  # scrolls down
         scrolldown_script = "window.scrollTo(0, document.body.scrollHeight);"
@@ -128,9 +132,14 @@ class SponsorshipCrawler(EnvLoginGatherer):
         text = self.get_instagram_text(url)
         for word in self.keywords:
             if re.search("(?<![\w\d])"+word+"(?![\w\d])", text):
-                f.write(text + "\n" + "source: " + url + "\n")
-                print("a post containing the key word found")
-                return
+
+                if (self.url_only):
+                    f.write(url + "\n")
+                    return
+                else:
+                    f.write(text + "\n" + "source: " + url + "\n")
+                    print("a post containing the key word found")
+                    return
 
     def twitter_login(self):
 
@@ -190,9 +199,13 @@ class SponsorshipCrawler(EnvLoginGatherer):
         text = self.get_twitter_text(url)
         for word in self.keywords:
             if re.search("(?<![\w\d])"+word+"(?![\w\d])", text):
-                f.write(text + "\n" + "source: " + url + "\n")
-                print("a post containing the key word found")
-                return
+                if (self.url_only):
+                    f.write(url + "\n")
+                    return
+                else:
+                    f.write(text + "\n" + "source: " + url + "\n")
+                    print("a post containing the key word found")
+                    return
 
     def get_twitter_text(self, url):
         self.driver.get(url)
